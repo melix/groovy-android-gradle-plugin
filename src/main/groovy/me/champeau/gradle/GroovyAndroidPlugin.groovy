@@ -34,7 +34,7 @@ class GroovyAndroidPlugin implements Plugin<Project> {
                     sourceCompatibility = '1.6'
                     targetCompatibility = '1.6'
                     doFirst {
-                        def runtimeJars = project.plugins.find { it.class.name == 'com.android.build.gradle.AppPlugin' }.runtimeJars
+                        def runtimeJars = project.plugins.findPlugin("android").bootClasspath
                         classpath = project.files(runtimeJars) + classpath
                     }
                 }
