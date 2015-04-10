@@ -16,8 +16,8 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.0'
-        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.5'
+        classpath 'com.android.tools.build:gradle:1.1.3'
+        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.6'
     }
 }
 
@@ -58,8 +58,8 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.1.0'
-        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.6-SNAPSHOT'
+        classpath 'com.android.tools.build:gradle:1.1.3'
+        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.7-SNAPSHOT'
     }
 }
 
@@ -89,8 +89,8 @@ The default language level for both source and target is `1.6`. You can change i
 
 project.androidGroovy {
     options {
-        sourceCompatibility = '1.7'
-        targetCompatibility = '1.7'
+        sourceCompatibility = JavaVersion.VERSION_1_7
+        targetCompatibility = JavaVersion.VERSION_1_7
     }
 }
 
@@ -106,8 +106,8 @@ project.androidGroovy {
             encoding = 'UTF-8'
             forkOptions.jvmArgs = ['-noverify'] // maybe necessary if you use Google Play Services
         }
-        sourceCompatibility = '1.7'
-        targetCompatibility = '1.7'
+        sourceCompatibility = JavaVersion.VERSION_1_7
+        targetCompatibility = JavaVersion.VERSION_1_7
     }
 }
 

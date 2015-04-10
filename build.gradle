@@ -9,14 +9,15 @@ buildscript {
     repositories {
         jcenter()
     }
+
     dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.3'
-        classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:2.2.4'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.1'
+        classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:3.1.0'
     }
 }
 
 dependencies {
-    compile localGroovy()
+    compile 'org.codehaus.groovy:groovy-all:2.4.1'
     compile gradleApi()
 }
 
