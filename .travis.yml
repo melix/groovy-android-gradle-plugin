@@ -1,7 +1,7 @@
 script: ./gradlew -q -s -PbuildInfo.build.number=$TRAVIS_BUILD_NUMBER -PbuildInfo.buildUrl=https://travis-ci.org/${TRAVIS_REPO_SLUG}/builds/${TRAVIS_JOB_ID}
   -PbuildInfo.buildAgent.name=$USER -PbuildInfo.principal=$USER clean build artifactoryPublish
 jdk:
-- oraclejdk7
+- openjdk7
 env:
   global:
   - secure: XmUpm/CUBmjCwTUIRblUyKbYNcZzFBKhufI5y5sQb42zyzqG7QIpgbIdGDC2xulJ672hixeBKtGSJ3fvAHZ6uFhAKXsh0/cPexc2FR14A5O99PP8zL3QGGgaFDOqv2AZ4lnULBmwtqJLqcWBzhQ2q8Uua3J83EUIjK6j8s0Ek10=

@@ -89,8 +89,8 @@ The default language level for both source and target is `1.6`. You can change i
 
 project.androidGroovy {
     options {
-        sourceCompatibility = JavaVersion.VERSION_1_7
-        targetCompatibility = JavaVersion.VERSION_1_7
+        sourceCompatibility = '1.7'
+        targetCompatibility = '1.7'
     }
 }
 
@@ -106,8 +106,8 @@ project.androidGroovy {
             encoding = 'UTF-8'
             forkOptions.jvmArgs = ['-noverify'] // maybe necessary if you use Google Play Services
         }
-        sourceCompatibility = JavaVersion.VERSION_1_7
-        targetCompatibility = JavaVersion.VERSION_1_7
+        sourceCompatibility = '1.7'
+        targetCompatibility = '1.7'
     }
 }
 

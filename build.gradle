@@ -17,7 +17,7 @@ buildscript {
 }
 
 dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.4.1'
+    compile localGroovy()
     compile gradleApi()
 }
 
