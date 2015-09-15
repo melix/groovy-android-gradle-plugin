@@ -74,7 +74,7 @@ class GroovyAndroidPlugin implements Plugin<Project> {
                 project.logger.debug("Configuring Groovy test variant $it.name")
                 def flavors = it.productFlavors*.name
                 def types = it.buildType*.name
-                groovyPlugin.attachGroovyCompileTask(project, plugin, javaCompile, ['androidTest', *flavors, *types])
+                groovyPlugin.attachGroovyCompileTask(project, plugin, javaCompile, ['test','androidTest', *flavors, *types])
             }
 
             // Forces Android Studio to recognize groovy folder as code
