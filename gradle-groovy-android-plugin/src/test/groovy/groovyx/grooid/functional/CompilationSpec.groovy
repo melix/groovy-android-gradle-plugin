@@ -78,7 +78,7 @@ class CompilationSpec extends FunctionalSpec {
       </manifest>
     """.trim()
 
-    file('src/main/res/activity_main.xml') << """
+    file('src/main/res/layout/activity_main.xml') << """
       <?xml version="1.0" encoding="utf-8"?>
       <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
           android:layout_width="match_parent"
