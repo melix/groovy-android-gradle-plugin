@@ -59,7 +59,7 @@ class GroovyAndroidPlugin implements Plugin<Project> {
                 project.logger.debug("Configuring Groovy variant $it.name")
                 def flavors = it.productFlavors*.name
                 def types = it.buildType*.name
-                groovyPlugin.attachGroovyCompileTask(project, plugin, javaCompile, ['ma in', *flavors, *types])
+                groovyPlugin.attachGroovyCompileTask(project, plugin, javaCompile, ['main', *flavors, *types])
 
                 // Unit tests (android plugin >= 1.1.0)
                 def unitTestTaskName = javaCompile.name.replaceFirst('Java', 'UnitTestJava')
