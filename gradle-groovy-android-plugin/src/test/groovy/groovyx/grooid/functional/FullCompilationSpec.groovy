@@ -232,11 +232,12 @@ class FullCompilationSpec extends FunctionalSpec {
     where:
     // test common configs that touches the different way to access the classpath
     javaVersion | androidPluginVersion | gradleVersion
-    '1.6'       | '1.1.0'              | '2.2' // android plugin requires 2.2 here.
-    '1.6'       | '1.3.0'              | '2.2' // android plugin requires 2.2 here.
+    '1.6'       | '1.1.0'              | '2.10' // android plugin requires 2.10, it use to require 2.2...
+    '1.6'       | '1.3.0'              | '2.10' // android plugin requires 2.10, it use to require 2.2...
     '1.6'       | '1.5.0'              | '2.10'
     '1.7'       | '1.5.0'              | '2.11'
     '1.7'       | '1.5.0'              | '2.12' // added due to breaking changes in gradle 2.12
+    '1.7'       | '2.0.0'              | '2.12'
   }
 
   @Unroll
@@ -386,11 +387,12 @@ class FullCompilationSpec extends FunctionalSpec {
     where:
     // test common configs that touches the different way to access the classpath
     javaVersion | androidPluginVersion | gradleVersion
-    '1.6'       | '1.1.0'              | '2.2' // android plugin requires 2.2 here.
-    '1.6'       | '1.3.0'              | '2.2' // android plugin requires 2.2 here.
+    '1.6'       | '1.1.0'              | '2.10' // android plugin requires 2.10, it use to require 2.2...
+    '1.6'       | '1.3.0'              | '2.10' // android plugin requires 2.10, it use to require 2.2...
     '1.6'       | '1.5.0'              | '2.10'
     '1.7'       | '1.5.0'              | '2.10'
     '1.7'       | '1.5.0'              | '2.11'
     '1.7'       | '1.5.0'              | '2.12'
+    '1.7'       | '2.0.0'              | '2.12'
   }
 }

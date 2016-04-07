@@ -65,7 +65,7 @@ class RenderScriptCompilationSpec extends FunctionalSpec {
           versionCode 1
           versionName '1.0.0'
 
-          renderscriptTargetApi 22
+          renderscriptTargetApi 20
           renderscriptSupportModeEnabled true
         }
 
