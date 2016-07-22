@@ -68,16 +68,18 @@ class GroovyAndroidPlugin implements Plugin<Project> {
 
         def sourceSetPath = project.file("src/$sourceSetName/groovy")
 
-        // add so Android Studio will recognize groovy files can see these
-        sourceSet.java.srcDir(sourceSetPath)
+        if (sourceSetPath.exists()) {
+          // add so Android Studio will recognize groovy files can see these
+          sourceSet.java.srcDir(sourceSetPath)
 
-        // create groovy source set so we can access it later
-        def groovySourceSet = extension.sourceSetsContainer.maybeCreate(sourceSetName)
-        sourceSet.convention.plugins['groovy'] = groovySourceSet
-        def groovyDirSet = groovySourceSet.groovy
-        groovyDirSet.srcDir(sourceSetPath)
+          // create groovy source set so we can access it later
+          def groovySourceSet = extension.sourceSetsContainer.maybeCreate(sourceSetName)
+          sourceSet.convention.plugins['groovy'] = groovySourceSet
+          def groovyDirSet = groovySourceSet.groovy
+          groovyDirSet.srcDir(sourceSetPath)
 
-        project.logger.debug("Created groovy sourceDirectorySet at $groovyDirSet.srcDirs")
+          project.logger.debug("Created groovy sourceDirectorySet at $groovyDirSet.srcDirs")
+        }
       }
     }
 
@@ -111,44 +113,49 @@ class GroovyAndroidPlugin implements Plugin<Project> {
       groovyTask.sourceCompatibility = javaTask.sourceCompatibility
       extension.configure(groovyTask)
 
-      groovyTask.destinationDir = javaTask.destinationDir
-      groovyTask.description = "Compiles the $variantDataName in groovy."
-      groovyTask.classpath = javaTask.classpath
-      groovyTask.setDependsOn(javaTask.dependsOn)
-      groovyTask.groovyClasspath = javaTask.classpath
+      if (groovyTask.enabled) {
+        groovyTask.destinationDir = javaTask.destinationDir
+        groovyTask.description = "Compiles the $variantDataName in groovy."
+        groovyTask.classpath = javaTask.classpath
+        groovyTask.setDependsOn(javaTask.dependsOn)
+        groovyTask.groovyClasspath = javaTask.classpath
 
-      def providers = variantData.variantConfiguration.sortedSourceProviders
-      providers.each { SourceProvider provider ->
-        def groovySourceSet = provider.convention.plugins['groovy'] as GroovySourceSet
-        def groovySourceDirectorySet = groovySourceSet.groovy
-        groovyTask.source(groovySourceDirectorySet)
+        def providers = variantData.variantConfiguration.sortedSourceProviders
+        providers.each { SourceProvider provider ->
+          def groovySourceSet = provider.convention.plugins['groovy'] as GroovySourceSet
+          if (groovySourceSet != null) {
+            def groovySourceDirectorySet = groovySourceSet.groovy
+            groovyTask.source(groovySourceDirectorySet)
 
-        // Exclude any java files that may be included in both java and groovy source sets
-        javaTask.exclude { file ->
-          project.logger.debug("Exclude java file $file.file")
-          project.logger.debug("Eexlude against groovy files $groovySourceSet.groovy.files")
-          file.file in groovySourceSet.groovy.files
-        }
+            // Exclude any java files that may be included in both java and groovy source sets
+            javaTask.exclude { file ->
+              project.logger.debug("Exclude java file $file.file")
+              project.logger.debug("Eexlude against groovy files $groovySourceSet.groovy.files")
+              file.file in groovySourceSet.groovy.files
+            }
 
-        if (extension.skipJavaC) {
-          groovyTask.source(*(javaTask.source.files as List))
-          javaTask.exclude {
-            true
+            if (extension.skipJavaC) {
+              groovyTask.source(*(javaTask.source.files as List))
+              javaTask.exclude {
+                true
+              }
+            }
           }
         }
+
+        def additionalSourceFiles = getGeneratedSourceDirs(variantData)
+        groovyTask.source(*additionalSourceFiles)
+
+        groovyTask.doFirst { GroovyCompile task ->
+          def androidRunTime = project.files(getRuntimeJars(androidPlugin, androidExtension))
+          task.classpath = androidRunTime + javaTask.classpath
+          task.groovyClasspath = task.classpath
+        }
+
+        javaTask.finalizedBy(groovyTask)
+      } else {
+        project.tasks.remove(groovyTask)
       }
-
-
-      def additionalSourceFiles = getGeneratedSourceDirs(variantData)
-      groovyTask.source(*additionalSourceFiles)
-
-      groovyTask.doFirst { GroovyCompile task ->
-        def androidRunTime = project.files(getRuntimeJars(androidPlugin, androidExtension))
-        task.classpath = androidRunTime + javaTask.classpath
-        task.groovyClasspath = task.classpath
-      }
-
-      javaTask.finalizedBy(groovyTask)
     }
   }
 
