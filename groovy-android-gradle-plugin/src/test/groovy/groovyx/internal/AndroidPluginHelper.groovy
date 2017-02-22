@@ -20,21 +20,31 @@ import com.android.build.gradle.AppPlugin
 import com.android.build.gradle.LibraryPlugin
 import groovyx.GroovyAndroidExtension
 import groovyx.GroovyAndroidPlugin
+import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Project
+import org.gradle.api.tasks.SourceSet
 
 trait AndroidPluginHelper {
   void applyAppPlugin() {
     project.pluginManager.apply(AppPlugin)
+    createSourceDirs(project.extensions.getByName('android').sourceSets)
     project.pluginManager.apply(GroovyAndroidPlugin)
   }
 
   void applyLibraryPlugin() {
     project.pluginManager.apply(LibraryPlugin)
+    createSourceDirs(project.extensions.getByName('android').sourceSets)
     project.pluginManager.apply(GroovyAndroidPlugin)
   }
 
   GroovyAndroidExtension getExtension() {
     project.extensions.getByType(GroovyAndroidExtension)
+  }
+
+  void createSourceDirs(NamedDomainObjectContainer<SourceSet> sourceSet){
+    sourceSet.each {
+      project.file("src/$it.name/groovy").mkdirs()
+    }
   }
 
   abstract Project getProject()
