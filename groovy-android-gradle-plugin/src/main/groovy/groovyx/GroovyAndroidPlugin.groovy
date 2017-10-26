@@ -21,7 +21,6 @@ import com.android.build.gradle.BasePlugin
 import com.android.build.gradle.api.AndroidSourceSet
 import com.android.build.gradle.internal.VariantManager
 import com.android.build.gradle.internal.variant.BaseVariantData
-import com.android.build.gradle.internal.variant.BaseVariantOutputData
 import com.android.builder.model.SourceProvider
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
@@ -37,7 +36,6 @@ import org.gradle.api.tasks.compile.GroovyCompile
 import org.gradle.internal.reflect.Instantiator
 
 import javax.inject.Inject
-
 /**
  * Adds support for building Android applications using the Groovy language.
  */
@@ -98,8 +96,8 @@ class GroovyAndroidPlugin implements Plugin<Project> {
   }
 
   private void processVariantData(
-      List<BaseVariantData<? extends BaseVariantOutputData>> variantDataList,
-      BaseExtension androidExtension, BasePlugin androidPlugin) {
+    List<BaseVariantData> variantDataList,
+    BaseExtension androidExtension, BasePlugin androidPlugin) {
 
     variantDataList.each { variantData ->
       def variantDataName = variantData.name

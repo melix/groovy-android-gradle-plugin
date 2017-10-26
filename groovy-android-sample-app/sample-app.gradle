@@ -16,12 +16,11 @@
 
 apply plugin: 'com.android.application'
 apply plugin: 'groovyx.android'
-apply from: "$rootDir/gradle/extraAndroidTasks.gradle"
 
 description = 'Sample project showing how to use Goovy on Android - http://www.groovy-lang.org'
 
 android {
-  compileSdkVersion 25
+  compileSdkVersion 26
   buildToolsVersion rootProject.buildToolsVersion
 
   defaultConfig {
@@ -78,5 +77,13 @@ dependencies {
 }
 
 configurations.all {
-  resolutionStrategy.force "com.android.support:support-annotations:24.2.1"
+  resolutionStrategy.force 'com.android.support:support-annotations:26.1.0'
+}
+
+android.applicationVariants.all { variant ->
+  // run lint on any build type when assemble is run
+  variant.assemble.dependsOn "lint$variantName"
+
+  // The default 'assemble' task only applies to normal variants. Add test variants as well.
+  tasks.getByName('assemble').dependsOn variant.assemble
 }

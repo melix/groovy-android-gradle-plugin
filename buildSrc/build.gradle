@@ -19,11 +19,12 @@ apply plugin: 'idea'
 apply from: '../gradle/versionFile.gradle'
 
 ext {
-  androidGradleVersion = '2.3.3'
+  androidGradleVersion = '3.0.0'
 }
 
 repositories {
   jcenter()
+  google()
 }
 
 dependencies {
