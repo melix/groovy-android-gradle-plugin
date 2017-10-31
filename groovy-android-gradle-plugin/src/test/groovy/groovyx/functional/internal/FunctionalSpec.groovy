@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package groovyx.functional
+package groovyx.functional.internal
 
 import com.google.common.base.StandardSystemProperty
 import groovyx.internal.FileHelper

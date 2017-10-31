@@ -40,7 +40,7 @@ class GroovyAndroidExtensionSpec extends Specification implements AndroidPluginH
 
   def "should set options on groovy compile"() {
     given:
-    def groovyTask = project.tasks.create('Test Groovy Compile', GroovyCompile)
+    def groovyTask = project.tasks.create('TestGroovyCompile', GroovyCompile)
 
     project.androidGroovy {
       options { // must be explicit here as spock does not resolve like gradle

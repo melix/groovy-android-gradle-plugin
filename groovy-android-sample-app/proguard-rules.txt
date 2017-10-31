@@ -13,4 +13,3 @@
 -dontwarn groovy**
 -dontnote org.codehaus.groovy.**
 -dontnote groovy**
-

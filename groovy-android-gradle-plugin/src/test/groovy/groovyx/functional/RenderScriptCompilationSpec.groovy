@@ -16,6 +16,7 @@
 
 package groovyx.functional
 
+import groovyx.functional.internal.FunctionalSpec
 import spock.lang.IgnoreIf
 
 import javax.imageio.ImageIO
@@ -40,6 +41,7 @@ class RenderScriptCompilationSpec extends FunctionalSpec {
         repositories {
           maven { url "${localRepo.toURI()}" }
           jcenter()
+          google()
         }
         dependencies {
           classpath 'com.android.tools.build:gradle:$androidPluginVersion'
@@ -82,7 +84,7 @@ class RenderScriptCompilationSpec extends FunctionalSpec {
       }
 
       dependencies {
-        compile 'org.codehaus.groovy:groovy:2.4.5:grooid'
+        compile 'org.codehaus.groovy:groovy:2.4.12:grooid'
       }
     """
 

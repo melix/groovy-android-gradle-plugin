@@ -15,6 +15,8 @@
  */
 package groovyx.functional
 
+import groovyx.functional.internal.FunctionalSpec
+
 import static groovyx.internal.TestProperties.androidPluginVersion
 import static groovyx.internal.TestProperties.buildToolsVersion
 import static groovyx.internal.TestProperties.compileSdkVersion
@@ -34,6 +36,7 @@ class KotlinSupportSpec extends FunctionalSpec {
         repositories {
           maven { url "${localRepo.toURI()}" }
           jcenter()
+          google()
         }
         dependencies {
           classpath 'com.android.tools.build:gradle:$androidPluginVersion'

@@ -16,117 +16,23 @@
 
 package groovyx.functional
 
-import static groovyx.internal.TestProperties.androidPluginVersion
-import static groovyx.internal.TestProperties.buildToolsVersion
-import static groovyx.internal.TestProperties.compileSdkVersion
+import groovyx.functional.internal.AndroidFunctionalSpec
+import groovyx.internal.AndroidFileHelper
+
+import java.lang.Void as Should
 
 /**
  * These tests are intended to test all standard functionality of the groovy android plugin.
  */
-class CompilationSpec extends FunctionalSpec {
+class CompilationSpec extends AndroidFunctionalSpec implements AndroidFileHelper {
 
-  def "should compile android app"() {
+  Should "compile android app"() {
     given:
     file("settings.gradle") << "rootProject.name = 'test-app'"
 
-    buildFile << """
-      buildscript {
-        repositories {
-          maven { url "${localRepo.toURI()}" }
-          jcenter()
-        }
-        dependencies {
-          classpath 'com.android.tools.build:gradle:$androidPluginVersion'
-          classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:$PLUGIN_VERSION'
-        }
-      }
-
-      apply plugin: 'com.android.application'
-      apply plugin: 'groovyx.android'
-
-      repositories {
-        jcenter()
-      }
-
-      android {
-        compileSdkVersion $compileSdkVersion
-        buildToolsVersion '$buildToolsVersion'
-
-        defaultConfig {
-          minSdkVersion 16
-          targetSdkVersion $compileSdkVersion
-
-          versionCode 1
-          versionName '1.0.0'
-
-          testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
-        }
-
-        buildTypes {
-          debug {
-            applicationIdSuffix '.dev'
-          }
-        }
-
-        compileOptions {
-          sourceCompatibility '1.7'
-          targetCompatibility '1.7'
-        }
-      }
-
-      dependencies {
-        compile 'org.codehaus.groovy:groovy:2.4.5:grooid'
-
-        androidTestCompile 'com.android.support.test:runner:0.4.1'
-        androidTestCompile 'com.android.support.test:rules:0.4.1'
-
-        testCompile 'junit:junit:4.12'
-      }
-
-      // force unit test types to be assembled too
-      android.testVariants.all { variant ->
-        tasks.getByName('assemble').dependsOn variant.assemble
-      }
-    """
-
-    file('src/main/AndroidManifest.xml') << """
-      <?xml version="1.0" encoding="utf-8"?>
-      <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="groovyx.test">
-
-        <application
-            android:allowBackup="true"
-            android:label="Test App">
-          <activity
-              android:name=".MainActivity"
-              android:label="Test App">
-            <intent-filter>
-              <action android:name="android.intent.action.MAIN"/>
-              <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-          </activity>
-        </application>
-
-      </manifest>
-    """.trim()
-
-    file('src/main/res/layout/activity_main.xml') << """
-      <?xml version="1.0" encoding="utf-8"?>
-      <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-      >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hello Groovy!"
-            android:gravity="center"
-            android:textAppearance="?android:textAppearanceLarge"
-        />
-
-      </FrameLayout>
-    """.trim()
+    createBuildFileForApplication()
+    createAndroidManifest()
+    createMainActivityLayoutFile()
 
     // create Java class to ensure this compile correctly along with groovy classes
     file('src/main/java/groovyx/test/SimpleJava.java') << """
@@ -206,73 +112,19 @@ class CompilationSpec extends FunctionalSpec {
 
     then:
     noExceptionThrown()
-    file('build/outputs/apk/test-app-debug.apk').exists()
+    file('build/outputs/apk/androidTest/debug/test-app-debug-androidTest.apk').exists()
     file('build/intermediates/classes/debug/groovyx/test/MainActivity.class').exists()
     file('build/intermediates/classes/androidTest/debug/groovyx/test/AndroidTest.class').exists()
     file('build/intermediates/classes/test/debug/groovyx/test/JvmTest.class').exists()
     file('build/intermediates/classes/test/release/groovyx/test/JvmTest.class').exists()
   }
 
-  def "should compile android library"() {
+  Should "should compile android library"() {
     given:
     file("settings.gradle") << "rootProject.name = 'test-lib'"
 
-    buildFile << """
-      buildscript {
-        repositories {
-          maven { url "${localRepo.toURI()}" }
-          jcenter()
-        }
-        dependencies {
-          classpath 'com.android.tools.build:gradle:$androidPluginVersion'
-          classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:$PLUGIN_VERSION'
-        }
-      }
-
-      apply plugin: 'com.android.library'
-      apply plugin: 'groovyx.android'
-
-      repositories {
-        jcenter()
-      }
-
-      android {
-        compileSdkVersion $compileSdkVersion
-        buildToolsVersion '$buildToolsVersion'
-
-        defaultConfig {
-          minSdkVersion 16
-          targetSdkVersion $compileSdkVersion
-
-          versionCode 1
-          versionName '1.0.0'
-        }
-
-        compileOptions {
-          sourceCompatibility '1.7'
-          targetCompatibility '1.7'
-        }
-      }
-
-      dependencies {
-        compile 'org.codehaus.groovy:groovy:2.4.5:grooid'
-
-        androidTestCompile 'com.android.support.test:runner:0.4.1'
-        androidTestCompile 'com.android.support.test:rules:0.4.1'
-
-        testCompile 'junit:junit:4.12'
-      }
-
-      // force unit test types to be assembled too
-      android.testVariants.all { variant ->
-        tasks.getByName('assemble').dependsOn variant.assemble
-      }
-    """
-
-    file('src/main/AndroidManifest.xml') << """
-      <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        package="groovyx.test"/>
-    """
+    createBuildFileForLibrary()
+    createSimpleAndroidManifest()
 
     // create Java class to ensure this compiles correctly along with groovy classes
     file('src/main/java/groovyx/test/SimpleJava.java') << """

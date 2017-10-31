@@ -47,8 +47,8 @@ android {
   buildTypes {
     debug {
       applicationIdSuffix '.dev'
-
-      minifyEnabled false
+      minifyEnabled true
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
     }
     release {
       minifyEnabled true
@@ -67,13 +67,13 @@ android {
 }
 
 dependencies {
-  compile "org.codehaus.groovy:groovy:$groovyVersion:grooid"
-  compile 'com.arasthel:swissknife:1.4.0'
+  implementation "org.codehaus.groovy:groovy:$groovyVersion:grooid"
+  implementation 'com.arasthel:swissknife:1.4.0'
 
-  androidTestCompile "com.android.support.test:runner:$androidSupportTestVersion"
-  androidTestCompile "com.android.support.test:rules:$androidSupportTestVersion"
+  androidTestImplementation "com.android.support.test:runner:$androidSupportTestVersion"
+  androidTestImplementation "com.android.support.test:rules:$androidSupportTestVersion"
 
-  testCompile "org.spockframework:spock-core:$spockVersion"
+  testImplementation "org.spockframework:spock-core:$spockVersion"
 }
 
 configurations.all {
@@ -81,9 +81,6 @@ configurations.all {
 }
 
 android.applicationVariants.all { variant ->
-  // run lint on any build type when assemble is run
-  variant.assemble.dependsOn "lint$variantName"
-
   // The default 'assemble' task only applies to normal variants. Add test variants as well.
   tasks.getByName('assemble').dependsOn variant.assemble
 }

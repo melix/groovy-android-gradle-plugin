@@ -16,6 +16,7 @@
 
 package groovyx.functional
 
+import groovyx.functional.internal.FunctionalSpec
 import spock.lang.IgnoreIf
 
 import static groovyx.internal.TestProperties.allTests
@@ -34,6 +35,7 @@ class SourceSetSpec extends FunctionalSpec {
         repositories {
           maven { url "${localRepo.toURI()}" }
           jcenter()
+          google()
         }
         dependencies {
           classpath 'com.android.tools.build:gradle:$androidPluginVersion'
@@ -46,6 +48,7 @@ class SourceSetSpec extends FunctionalSpec {
 
       repositories {
         jcenter()
+        google()
       }
 
       android {
@@ -83,7 +86,7 @@ class SourceSetSpec extends FunctionalSpec {
       }
 
       dependencies {
-        compile 'org.codehaus.groovy:groovy:2.4.5:grooid'
+        compile 'org.codehaus.groovy:groovy:2.4.12:grooid'
       }
     """
 
@@ -175,6 +178,7 @@ class SourceSetSpec extends FunctionalSpec {
         repositories {
           maven { url "${localRepo.toURI()}" }
           jcenter()
+          google()
         }
         dependencies {
           classpath 'com.android.tools.build:gradle:$androidPluginVersion'
@@ -187,6 +191,7 @@ class SourceSetSpec extends FunctionalSpec {
 
       repositories {
         jcenter()
+        google()
       }
 
       android {
@@ -224,7 +229,7 @@ class SourceSetSpec extends FunctionalSpec {
       }
 
       dependencies {
-        compile 'org.codehaus.groovy:groovy:2.4.5:grooid'
+        compile 'org.codehaus.groovy:groovy:2.4.12:grooid'
       }
     """
 

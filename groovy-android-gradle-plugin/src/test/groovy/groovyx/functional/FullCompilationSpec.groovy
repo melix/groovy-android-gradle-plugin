@@ -16,132 +16,26 @@
 
 package groovyx.functional
 
+import groovyx.functional.internal.AndroidFunctionalSpec
 import spock.lang.IgnoreIf
 import spock.lang.Unroll
 
-import static groovyx.internal.TestProperties.allTests
-import static groovyx.internal.TestProperties.buildToolsVersion
-import static groovyx.internal.TestProperties.compileSdkVersion
-
+import static groovyx.internal.TestProperties.*
 /**
  * Complete test suite to ensure the plugin works with the different versions of android gradle plugin.
  * This will only be run if the system property of 'allTests' is set to true
  */
 @IgnoreIf({ !allTests })
-class FullCompilationSpec extends FunctionalSpec {
+class FullCompilationSpec extends AndroidFunctionalSpec {
 
   @Unroll
   def "should compile android app with java:#javaVersion, android plugin:#androidPluginVersion, gradle version: #gradleVersion"() {
     given:
     file("settings.gradle") << "rootProject.name = 'test-app'"
 
-    buildFile << """
-      buildscript {
-        repositories {
-          maven { url "${localRepo.toURI()}" }
-          jcenter()
-        }
-        dependencies {
-          classpath 'com.android.tools.build:gradle:$androidPluginVersion'
-          classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:$PLUGIN_VERSION'
-        }
-      }
-
-      apply plugin: 'com.android.application'
-      apply plugin: 'groovyx.android'
-
-      repositories {
-        jcenter()
-      }
-
-      android {
-        compileSdkVersion $compileSdkVersion
-        buildToolsVersion '$buildToolsVersion'
-
-        defaultConfig {
-          minSdkVersion 16
-          targetSdkVersion $compileSdkVersion
-
-          versionCode 1
-          versionName '1.0.0'
-
-          testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
-        }
-
-        buildTypes {
-          debug {
-            applicationIdSuffix '.dev'
-          }
-        }
-
-        compileOptions {
-          sourceCompatibility $javaVersion
-          targetCompatibility $javaVersion
-        }
-      }
-
-      androidGroovy {
-        options {
-          configure(groovyOptions) {
-            encoding = 'UTF-8'
-            forkOptions.jvmArgs = ['-noverify']
-          }
-         }
-      }
-
-      dependencies {
-        compile 'org.codehaus.groovy:groovy:2.4.5:grooid'
-
-        androidTestCompile 'com.android.support.test:runner:0.4.1'
-        androidTestCompile 'com.android.support.test:rules:0.4.1'
-
-        testCompile 'junit:junit:4.12'
-      }
-
-      // force unit test types to be assembled too
-      android.testVariants.all { variant ->
-        tasks.getByName('assemble').dependsOn variant.assemble
-      }
-    """
-
-    file('src/main/AndroidManifest.xml') << """
-      <?xml version="1.0" encoding="utf-8"?>
-      <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="groovyx.test">
-
-        <application
-            android:allowBackup="true"
-            android:label="Test App">
-          <activity
-              android:name=".MainActivity"
-              android:label="Test App">
-            <intent-filter>
-              <action android:name="android.intent.action.MAIN"/>
-              <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-          </activity>
-        </application>
-
-      </manifest>
-    """.trim()
-
-    file('src/main/res/layout/activity_main.xml') << """
-      <?xml version="1.0" encoding="utf-8"?>
-      <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-      >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hello Groovy!"
-            android:gravity="center"
-            android:textAppearance="?android:textAppearanceLarge"
-        />
-
-      </FrameLayout>
-    """.trim()
+    createBuildFileForApplication(_androidPluginVersion, javaVersion)
+    createAndroidManifest()
+    createMainActivityLayoutFile()
 
     // create Java class to ensure this compile correctly along with groovy classes
     file('src/main/java/groovyx/test/SimpleJava.java') << """
@@ -229,13 +123,7 @@ class FullCompilationSpec extends FunctionalSpec {
 
     where:
     // test common configs that touches the different way to access the classpath
-    javaVersion                     | androidPluginVersion | gradleVersion
-    'JavaVersion.VERSION_1_6'       | '1.5.0'              | '2.10'
-    'JavaVersion.VERSION_1_7'       | '1.5.0'              | '2.11'
-    'JavaVersion.VERSION_1_7'       | '1.5.0'              | '2.12'
-    'JavaVersion.VERSION_1_7'       | '2.0.0'              | '2.13'
-    'JavaVersion.VERSION_1_7'       | '2.1.2'              | '2.14'
-    'JavaVersion.VERSION_1_7'       | '2.2.0'              | '2.14.1'
+    javaVersion                     | _androidPluginVersion | gradleVersion
     'JavaVersion.VERSION_1_7'       | '2.2.0'              | '3.0'
     'JavaVersion.VERSION_1_7'       | '2.2.0'              | '3.1'
     'JavaVersion.VERSION_1_6'       | '2.2.3'              | '3.2'
@@ -256,9 +144,10 @@ class FullCompilationSpec extends FunctionalSpec {
         repositories {
           maven { url "${localRepo.toURI()}" }
           jcenter()
+          google()
         }
         dependencies {
-          classpath 'com.android.tools.build:gradle:$androidPluginVersion'
+          classpath 'com.android.tools.build:gradle:$_androidPluginVersion'
           classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:$PLUGIN_VERSION'
         }
       }
@@ -268,6 +157,7 @@ class FullCompilationSpec extends FunctionalSpec {
 
       repositories {
         jcenter()
+        google()
       }
 
       android {
@@ -289,7 +179,7 @@ class FullCompilationSpec extends FunctionalSpec {
       }
 
       dependencies {
-        compile 'org.codehaus.groovy:groovy:2.4.5:grooid'
+        compile 'org.codehaus.groovy:groovy:2.4.12:grooid'
 
         androidTestCompile 'com.android.support.test:runner:0.4.1'
         androidTestCompile 'com.android.support.test:rules:0.4.1'
@@ -392,7 +282,7 @@ class FullCompilationSpec extends FunctionalSpec {
 
     where:
     // test common configs that touches the different way to access the classpath
-    javaVersion                     | androidPluginVersion | gradleVersion
+    javaVersion                     | _androidPluginVersion | gradleVersion
     'JavaVersion.VERSION_1_6'       | '1.5.0'              | '2.10'
     'JavaVersion.VERSION_1_7'       | '1.5.0'              | '2.11'
     'JavaVersion.VERSION_1_7'       | '1.5.0'              | '2.12'

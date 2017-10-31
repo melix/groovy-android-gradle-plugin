@@ -25,11 +25,11 @@ buildscript {
     classpath 'com.android.tools.build:gradle:3.0.0'
     classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:1.2.0'
     classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
-    classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.4.12'
-    classpath 'com.github.ben-manes:gradle-versions-plugin:0.15.0'
+    classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.5.4'
+    classpath 'com.github.ben-manes:gradle-versions-plugin:0.17.0'
     classpath 'com.netflix.nebula:gradle-extra-configurations-plugin:3.2.0'
-    classpath 'com.gradle:build-scan-plugin:1.10.1'
-    classpath 'com.gradle.publish:plugin-publish-plugin:0.9.7'
+    classpath 'com.gradle:build-scan-plugin:1.10'
+    classpath 'com.gradle.publish:plugin-publish-plugin:0.9.9'
   }
 }
 
@@ -77,7 +77,7 @@ ext {
   buildToolsVersion = '26.0.2'
   compileSdkVersion = 26
   spockVersion = '1.1-groovy-2.4'
-  androidSupportTestVersion = '0.5'
+  androidSupportTestVersion = '1.0.1'
   groovyVersion = '2.4.12'
 }
 

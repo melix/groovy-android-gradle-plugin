@@ -15,7 +15,7 @@
  */
 
 include 'groovy-android-gradle-plugin'
-// include 'groovy-android-sample-app'
+include 'groovy-android-sample-app'
 
 rootProject.name = 'groovy-android'
 

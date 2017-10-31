@@ -1,3 +1,8 @@
+1.3.0
+-----
+
+* dropped offical support for anything less that 2.2.0 version of android gradle plugin and 3.0 gradle
+
 1.2.0
 -----
     * Added support for annotation processing (#142)

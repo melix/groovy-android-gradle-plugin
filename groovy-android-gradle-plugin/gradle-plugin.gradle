@@ -55,6 +55,8 @@ task release {
 }
 
 tasks.withType(Test) {
+  maxParallelForks 1
+
   systemProperty 'androidPluginVersion', androidPluginVersion
   systemProperty 'buildToolsVersion', buildToolsVersion
   systemProperty 'compileSdkVersion', compileSdkVersion

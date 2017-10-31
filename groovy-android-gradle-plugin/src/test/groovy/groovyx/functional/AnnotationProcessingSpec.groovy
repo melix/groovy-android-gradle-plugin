@@ -1,119 +1,15 @@
 package groovyx.functional
 
-import static groovyx.internal.TestProperties.androidPluginVersion
-import static groovyx.internal.TestProperties.buildToolsVersion
-import static groovyx.internal.TestProperties.compileSdkVersion
+import groovyx.functional.internal.AndroidFunctionalSpec
 
-class AnnotationProcessingSpec extends FunctionalSpec {
+class AnnotationProcessingSpec extends AndroidFunctionalSpec {
   def "should compile android app with annotation processing"() {
     given:
     file("settings.gradle") << "rootProject.name = 'test-app'"
 
-    buildFile << """
-      buildscript {
-        repositories {
-          maven { url "${localRepo.toURI()}" }
-          jcenter()
-        }
-        dependencies {
-          classpath 'com.android.tools.build:gradle:$androidPluginVersion'
-          classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:$PLUGIN_VERSION'
-        }
-      }
-
-      apply plugin: 'com.android.application'
-      apply plugin: 'groovyx.android'
-
-      repositories {
-        jcenter()
-      }
-
-      android {
-        compileSdkVersion $compileSdkVersion
-        buildToolsVersion '$buildToolsVersion'
-
-        defaultConfig {
-          minSdkVersion 16
-          targetSdkVersion $compileSdkVersion
-
-          versionCode 1
-          versionName '1.0.0'
-
-          testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
-        }
-
-        buildTypes {
-          debug {
-            applicationIdSuffix '.dev'
-          }
-        }
-
-        compileOptions {
-          sourceCompatibility '1.7'
-          targetCompatibility '1.7'
-        }
-      }
-
-      dependencies {
-        compile 'org.codehaus.groovy:groovy:2.4.11:grooid'
-
-        compile 'com.squareup.moshi:moshi:1.5.0'
-        annotationProcessor 'com.ryanharter.auto.value:auto-value-moshi:0.4.3'
-        provided 'com.ryanharter.auto.value:auto-value-moshi-annotations:0.4.3'
-
-        annotationProcessor 'com.google.auto.value:auto-value:1.4.1'
-        provided 'com.jakewharton.auto.value:auto-value-annotations:1.4'
-
-        androidTestCompile 'com.android.support.test:runner:0.4.1'
-        androidTestCompile 'com.android.support.test:rules:0.4.1'
-
-        testCompile 'junit:junit:4.12'
-      }
-
-      // force unit test types to be assembled too
-      android.testVariants.all { variant ->
-        tasks.getByName('assemble').dependsOn variant.assemble
-      }
-    """
-
-    file('src/main/AndroidManifest.xml') << """
-      <?xml version="1.0" encoding="utf-8"?>
-      <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="groovyx.test">
-
-        <application
-            android:allowBackup="true"
-            android:label="Test App">
-          <activity
-              android:name=".MainActivity"
-              android:label="Test App">
-            <intent-filter>
-              <action android:name="android.intent.action.MAIN"/>
-              <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-          </activity>
-        </application>
-
-      </manifest>
-    """.trim()
-
-    file('src/main/res/layout/activity_main.xml') << """
-      <?xml version="1.0" encoding="utf-8"?>
-      <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-      >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hello Groovy!"
-            android:gravity="center"
-            android:textAppearance="?android:textAppearanceLarge"
-        />
-
-      </FrameLayout>
-    """.trim()
+    createBuildFileForApplication()
+    createAndroidManifest()
+    createMainActivityLayoutFile()
 
     file('src/main/groovy/groovyx/test/MainActivity.groovy') << """
       package groovyx.test
@@ -213,6 +109,7 @@ class AnnotationProcessingSpec extends FunctionalSpec {
     """
 
     when:
+    copyTestDir()
     run 'assemble', 'test'
 
     then:
