@@ -122,7 +122,7 @@ class FullCompilationSpec extends AndroidFunctionalSpec implements AndroidFileHe
     noExceptionThrown()
     file('build/outputs/apk/debug/test-app-debug.apk').exists()
     file("build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/MainActivity.class").exists()
-    file("build/intermediates//javac/debugAndroidTest/compileDebugAndroidTestJavaWithJavac/classes/groovyx/test/AndroidTest.class").exists()
+    file("build/intermediates/javac/debugAndroidTest/compileDebugAndroidTestJavaWithJavac/classes/groovyx/test/AndroidTest.class").exists()
     if (args.contains('test')) {
       assert file("build/intermediates/javac/debugUnitTest/compileDebugUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class").exists()
       assert file("build/intermediates/javac/releaseUnitTest/compileReleaseUnitTestJavaWithJavac/classes/groovyx/test/JvmTest.class").exists()

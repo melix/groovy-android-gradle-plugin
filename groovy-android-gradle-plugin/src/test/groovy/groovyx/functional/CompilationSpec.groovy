@@ -201,8 +201,7 @@ class CompilationSpec extends AndroidFunctionalSpec implements AndroidFileHelper
 
     then:
     noExceptionThrown()
-    file('build/outputs/aar/test-lib-debug.aar').exists()
-    file('build/outputs/aar/test-lib-release.aar').exists()
+    file('build/outputs/aar/test-lib.aar').exists()
     file('build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/groovyx/test/Test.class').exists()
     file('build/intermediates/javac/release/compileReleaseJavaWithJavac/classes/groovyx/test/Test.class').exists()
     file('build/intermediates/javac/debugAndroidTest/compileDebugAndroidTestJavaWithJavac/classes/groovyx/test/AndroidTest.class').exists()

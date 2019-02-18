@@ -26,7 +26,7 @@ buildscript {
     classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
     classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.9.1'
     classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0'
-    classpath 'com.gradle:build-scan-plugin:1.10.3'
+    classpath 'com.gradle:build-scan-plugin:2.1'
     classpath 'com.gradle.publish:plugin-publish-plugin:0.10.1'
   }
 }
@@ -66,8 +66,9 @@ subprojects {
 }
 
 buildScan {
-  licenseAgreementUrl = 'https://gradle.com/terms-of-service'
-  licenseAgree = 'yes'
+  termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+  termsOfServiceAgree = 'yes'
+  publishAlways()
 }
 
 ext {
